@@ -2,12 +2,22 @@
     require_once 'classes/conexaoPrisma.php';
     require_once 'classes/BancoInter.php';
 
-    if (empty($_GET['parcela'])) {
+    if (!isset($_GET['data_inicial'])) {
+        echo "<script type='text/javascript'>alert('Erro! O valor da chave: Data Inicial, deve ser definido como parâmetro da URL.');</script>";
+    } elseif (empty($_GET['data_inicial'])) {
+        echo "<script type='text/javascript'>alert('Erro! O valor da chave: Data Inicial, não pode estar vazio.');</script>";
+    } elseif (!isset($_GET['data_final'])) {
+        echo "<script type='text/javascript'>alert('Erro! O valor da chave: Data Final, deve ser definido como parâmetro da URL.');</script>";
+    } elseif (empty($_GET['data_final'])) {
+        echo "<script type='text/javascript'>alert('Erro! O valor da chave: Data Final, não pode estar vazio.');</script>";
+    } elseif (empty($_GET['cpf'])) {
         echo "<script type='text/javascript'>alert('Erro! O valor da chave: CPF, não pode estar vazio.');</script>";
     } else {
 
         $parametros = [
-            "" => $_GET["parcela"]
+            "dataInicial" => $_GET["data_inicial"],
+            "dataFinal"   => $_GET["data_final"],
+            "cpfCnpjPessoaPagadora" => $_GET["cpf"]
         ];
     
         try {       

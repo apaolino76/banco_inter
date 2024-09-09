@@ -20,10 +20,20 @@
             $linhas    = $appPrisma->buscarParcelasPrismaPorCompetencia();
             $total     = 0;        
             foreach ($linhas as $linha){
+                
                 if(is_null($linha["cod_solicitacao"])){    
 //                    var_dump($linha["cod_parcela"]);
                     $data = $appPrisma->gerarJsonComDadosDoPagador($linha);
                     $obj  = $appInter->geraCobrancaNoAppInter($token, $data);
+                    if(isset($obj->violacoes)){
+                        $mensagem = $obj->detail . '\n';
+                        $indice = 1;
+                        foreach ($obj->violacoes as $violacao) {
+                            $mensagem .= $indice . ") " . (isset($violacao->razao) ? $violacao->razao : "") . (isset($violacao->propriedade) ? " => " . $violacao->propriedade : "") . '\n';
+                            $indice++;
+                        }
+                        throw new Exception($mensagem);
+                    }
                     $appPrisma->gravarDadosBoletoInter($linha, $obj->codigoSolicitacao);
                     $total++;
                 }

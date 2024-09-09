@@ -143,18 +143,18 @@
         }
 
         public function gerarJsonComDadosDoPagador($linha){
-          $tipo_logra    = trim($linha["logr_cob"]);
-          $logradouro    = trim($linha["descricao_logr_cob"]);
-          $endereco      = $tipo_logra . " " . $logradouro;
+          $tipo_logra = trim($linha["logr_cob"]);
+          $logradouro = trim($linha["descricao_logr_cob"]);
+          $endereco   = $tipo_logra . " " . $logradouro;
           
-          $dados = array(
+          $dados = [
             "seuNumero"        => strval($linha["cod_parcela"]),
             "valorNominal"     => round($linha["valor_pagar"], 2),
-//              "valorAbatimento"  => 0,
+  //              "valorAbatimento"  => 0,
             "dataVencimento"   => $linha["data_vencimento"],
             "numDiasAgenda"    => 35,
-//              "atualizarPagador" => false,
-            "pagador"          => array(
+  //              "atualizarPagador" => false,
+            "pagador"          => [
               "email"       => $linha["email_resp_finan"],
               "ddd"         => strval(intval($linha["ddd_resp_finan"])),
               "telefone"    => strval($linha["tel_resp_finan"]),
@@ -168,22 +168,25 @@
               "cidade"      => $linha["cidade_resp_finan"],
               "uf"          => $linha["uf_resp_finan"],
               "cep"         => strval($linha["cep_resp_finan"])
-            ),
-            "multa" => array(
+
+            ], 
+            "multa" => [
               "valor"  => round((round($linha["valor_pagar"], 2) * 0.02), 2),
               "codigo" => "VALORFIXO"
-            ),
-            "mora" => array(
+            ],
+            "mora" => [
               "valor"  => round((round($linha["valor_pagar"], 2) * 0.033)/100, 2),
               "codigo" => "VALORDIA"
-            ),
-            "mensagem" => array(
+            ],
+            "mensagem" => [
               "linha1" => "Vencimento original: " . $linha["data_vencimento_frm"],
               "linha2" => "Valor original: R$ " . $linha["valor_pagar"],
               "linha3" => "Pagamento ref. " . $linha["numero"] . "ª parcela",
               "linha4" => "Não receber após o vencimento. MORA: 0,033% a.d MULTA: 2% a.m"
-            )
-          );    
+            ] 
+          ];
+                    
+//          return json_encode($dados, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
   
           return $this->montarJson($dados);
         } 
